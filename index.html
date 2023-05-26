@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Calculator</title>
+  <script>
+    var argumentsList = [];
+
+    function addArgument() {
+      var argumentType = document.getElementById("argumentType").value;
+      var argumentValue = document.getElementById("argumentValue").value;
+
+      if (argumentType === "My Argument") {
+        argumentsList.push(argumentValue);
+      } else {
+        argumentsList.push(argumentType);
+      }
+
+      // Clear the input fields
+      document.getElementById("argumentType").value = "";
+      document.getElementById("argumentValue").value = "";
+
+      displayArguments();
+    }
+
+    function addOperation() {
+      var operation = document.getElementById("operation").value;
+      argumentsList.push(operation);
+
+      // Clear the dropdown selection
+      document.getElementById("operation").value = "";
+
+      displayArguments();
+    }
+
+    function displayArguments() {
+      var list = document.getElementById("argumentsList");
+      list.innerHTML = "";
+
+      for (var i = 0; i < argumentsList.length; i++) {
+        var item = document.createElement("li");
+        item.textContent = argumentsList[i];
+        list.appendChild(item);
+      }
+    }
+
+    function performOperation() {
+      var result = calculateResult(argumentsList);
+      document.getElementById("result").textContent = "Result: " + result;
+    }
+
+    function calculateResult(argumentsList) {
+      var result = true;
+      for (var i = 0; i < argumentsList.length; i++) {
+        var argument = argumentsList[i];
+
+        if (typeof argument === "string") {
+          if (argument === "AND") {
+            result = result && true;
+          } else if (argument === "OR") {
+            result = result || false;
+          } else {
+            result = result && argument;
+          }
+        } else {
+          result = result && argument;
+        }
+      }
+
+      return result;
+    }
+  </script>
+</head>
+<body>
+  <h1>Arithmetic Operator Calculator</h1>
+  <label for="argumentType">Argument Type:</label>
+  <select id="argumentType">
+    <option value="My Argument">My Argument</option>
+    <option value="Constant">Constant</option>
+    <option value="AND">AND</option>
+    <option value="OR">OR</option>
+  </select>
+  <label for="argumentValue">Argument Value:</label>
+  <select id="argumentValue">
+    <option value="X">X</option>
+    <option value="True">True</option>
+    <option value="False">False</option>
+  </select>
+  <button onclick="addArgument()">Add Argument</button>
+  <br><br>
+  <label for="operation">Operation:</label>
+  <select id="operation">
+    <option value="AND">AND</option>
+    <option value="OR">OR</option>
+  </select>
+  <button onclick="addOperation()">Add Operation</button>
+  <br><br>
+  <h3>Selected Arguments and Operations:</h3>
+  <ul id="argumentsList"></ul>
+  <br>
+  <button onclick="performOperation()">Calculate</button>
+  <br><br>
+  <div id="result"></div>
+</body>
+</html>
